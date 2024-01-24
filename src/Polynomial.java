@@ -1,4 +1,6 @@
+import javax.print.attribute.HashDocAttributeSet;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Polynomial {
     private int[] coeficientes;
@@ -23,8 +25,77 @@ public class Polynomial {
     }
 
     public Polynomial(String s) {
+        this.coeficientes = casteoString(s);
+    }
 
+    private int[] casteoString(String s) {
+        String[] arrMonomios = s.split(" ");
+        int gradoMaximo = saberGradoMaximo(arrMonomios);
+        int[] arrFinal = new int[gradoMaximo+1];
+        String signo = "+";
 
+        for (int i = 0; i < arrMonomios.length; i++) {
+            if (Objects.equals(arrMonomios[i], "+")){
+                signo = "+";
+            } else if (Objects.equals(arrMonomios[i], "-")) {
+                signo = "-";
+            } else if (signo == "+") {
+                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] = saberNumero(arrMonomios[i]);
+            } else if (signo == "-") {
+                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] = saberNumero(arrMonomios[i]) * -1;
+            }
+        }
+        return arrFinal;
+
+    }
+
+    private int saberNumero(String arrMonomio) {
+        String resultado = "";
+        int numFinal = 0;
+        for (int i = 0; i < arrMonomio.length(); i++) {
+            if (arrMonomio.charAt(i) == 'x'){
+                break;
+            }else {
+                resultado += arrMonomio.charAt(i);
+            }
+        }
+        numFinal = Integer.parseInt(resultado);
+
+        return numFinal;
+    }
+
+    private int calcularGrado(String arrMonomio) {
+        int grado = 0;
+
+        for (int i = 0; i < arrMonomio.length(); i++) {
+            if (arrMonomio.charAt(i) == '^'){
+                grado += Character.getNumericValue(arrMonomio.charAt(i+1));
+            } else if (arrMonomio.charAt(i) == 'x') {
+                if (grado <= 1){
+                    grado++;
+                }
+            }
+        }
+        return grado;
+    }
+
+    private int saberGradoMaximo(String[] arrMonomios) {
+        int grado = 0;
+
+        for (int i = 0; i < arrMonomios.length; i++) {
+            for (int j = 0; j < arrMonomios[i].length(); j++) {
+                if (arrMonomios[i].charAt(j) == '^'){
+                    if (grado < Character.getNumericValue(arrMonomios[i].charAt(j+1))){
+                        grado = Character.getNumericValue(arrMonomios[i].charAt(j+1));
+                    }
+                } else if (arrMonomios[i].charAt(j) == 'x') {
+                    if (grado < 1){
+                        grado = 1;
+                    }
+                }
+            }
+        }
+        return grado;
     }
 
     public float[] roots() {
@@ -82,6 +153,7 @@ public class Polynomial {
                 grado--;
             }
         }
+        System.out.println(Arrays.toString(coe));
 
         return resultado;
     }
