@@ -1,15 +1,45 @@
 public class ejemplo {
     public static void main(String[] args) {
-        float numeroFloat = 3.2f;
-
-        // Utilizando Math.floor para redondear hacia abajo
-        int numeroEntero1 = (int) Math.floor(numeroFloat);
-
-        // Utilizando Math.ceil para redondear hacia arriba
-        int numeroEntero2 = (int) Math.ceil(numeroFloat);
-
-        System.out.println("Número original: " + numeroFloat);
-        System.out.println("Número entero (Math.floor): " + numeroEntero1);
-        System.out.println("Número entero (Math.ceil): " + numeroEntero2);
+        int[] coe = {3, 5, -7, -6, 0, -6};
+        String monomio = paintMonomio(coe);
+        System.out.println("Monomio: " + monomio);
     }
+
+    public static String paintMonomio(int[] coeficientes) {
+        StringBuilder resultado = new StringBuilder();
+
+        for (int i = 0; i < coeficientes.length; i++) {
+            int coeficiente = coeficientes[i];
+
+            if (coeficiente != 0) {
+                if (i == 0){
+                    resultado.append(Math.abs(coeficiente));
+                    if (coeficientes.length - 1 - i > 0) {
+                        resultado.append("x");
+
+                        if (coeficientes.length - 1 - i > 1) {
+                            resultado.append("^").append(coeficientes.length - 1 - i);
+                        }
+                    }
+                }else {
+                    if (Math.abs(coeficiente) != 1 || (coeficientes.length - 1 - i) == 0) {
+                        resultado.append((coeficiente > 0) ? " + " : " - ");
+                        resultado.append(Math.abs(coeficiente));
+                    }
+
+                    if (coeficientes.length - 1 - i > 0) {
+                        resultado.append("x");
+
+                        if (coeficientes.length - 1 - i > 1) {
+                            resultado.append("^").append(coeficientes.length - 1 - i);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return resultado.toString();
+    }
+
 }

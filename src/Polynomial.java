@@ -51,7 +51,7 @@ public class Polynomial {
 
     private int saberNumero(String arrMonomio) {
         String resultado = "";
-        int numFinal = 0;
+        int numFinal;
         for (int i = 0; i < arrMonomio.length(); i++) {
             if (arrMonomio.charAt(i) == 'x'){
                 break;
@@ -59,17 +59,32 @@ public class Polynomial {
                 resultado += arrMonomio.charAt(i);
             }
         }
-        numFinal = Integer.parseInt(resultado);
 
+        if (resultado == ""){
+            numFinal = 1;
+        }else {
+            numFinal = Integer.parseInt(resultado);
+        }
         return numFinal;
     }
 
     private int calcularGrado(String arrMonomio) {
         int grado = 0;
+        String suma = "";
 
         for (int i = 0; i < arrMonomio.length(); i++) {
             if (arrMonomio.charAt(i) == '^'){
-                grado += Character.getNumericValue(arrMonomio.charAt(i+1));
+                for (int j = i+1; j < arrMonomio.length(); j++) {
+                    suma += arrMonomio.charAt(j);
+                }
+
+                if (grado < Integer.parseInt(suma)){
+                    grado = Integer.parseInt(suma);
+                    suma = "";
+                }else {
+                    suma = "";
+                }
+
             } else if (arrMonomio.charAt(i) == 'x') {
                 if (grado <= 1){
                     grado++;
@@ -81,13 +96,22 @@ public class Polynomial {
 
     private int saberGradoMaximo(String[] arrMonomios) {
         int grado = 0;
+        String suma = "";
 
         for (int i = 0; i < arrMonomios.length; i++) {
             for (int j = 0; j < arrMonomios[i].length(); j++) {
                 if (arrMonomios[i].charAt(j) == '^'){
-                    if (grado < Character.getNumericValue(arrMonomios[i].charAt(j+1))){
-                        grado = Character.getNumericValue(arrMonomios[i].charAt(j+1));
+                    for (int k = j+1; k < arrMonomios[i].length(); k++) {
+                        suma += arrMonomios[i].charAt(k);
                     }
+
+                    if (grado < Integer.parseInt(suma)){
+                        grado = Integer.parseInt(suma);
+                        suma = "";
+                    }else {
+                        suma = "";
+                    }
+
                 } else if (arrMonomios[i].charAt(j) == 'x') {
                     if (grado < 1){
                         grado = 1;

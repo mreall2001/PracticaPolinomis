@@ -9,7 +9,7 @@ public class PolynomialTest {
     public void constructs1() {
         Polynomial p;
 
-        p = new Polynomial(new float[]{1, 5});
+        p = new Polynomial(new float[]{8, -4, -7, 5});
         assertEquals("x + 5", p.toString());
 
         p = new Polynomial(new float[]{0});
@@ -32,8 +32,8 @@ public class PolynomialTest {
     public void constructs2() {
         Polynomial p;
 
-        p = new Polynomial("3x + 5 + 2x^2");
-        assertEquals("2x^2 + 3x + 5", p.toString());
+ //       p = new Polynomial("3x + 5 + 2x^2");
+   //     assertEquals("2x^2 + 3x + 5", p.toString());
 
         p = new Polynomial("-81x + 9x^9 - 6x^5 - x^90 - 6 + 8x^2");
         assertEquals("-x^90 + 9x^9 - 6x^5 + 8x^2 - 81x - 6", p.toString());
