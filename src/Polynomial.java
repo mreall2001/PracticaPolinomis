@@ -40,9 +40,9 @@ public class Polynomial {
             } else if (Objects.equals(arrMonomios[i], "-")) {
                 signo = "-";
             } else if (signo == "+") {
-                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] = saberNumero(arrMonomios[i]);
+                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] += saberNumero(arrMonomios[i]);
             } else if (signo == "-") {
-                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] = saberNumero(arrMonomios[i]) * -1;
+                arrFinal[gradoMaximo - calcularGrado(arrMonomios[i])] += saberNumero(arrMonomios[i]) * -1;
             }
         }
         return arrFinal;
@@ -142,11 +142,10 @@ public class Polynomial {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Polynomial that = (Polynomial) o;
-        return Arrays.equals(coeficientes, that.coeficientes);
+        return this.toString().equals(o.toString());
+
     }
+
 
     @Override
     public String toString() {
@@ -155,52 +154,39 @@ public class Polynomial {
         return pintarPolinomio(coeficientes);
     }
 
-    public static String pintarPolinomio(int[] coe){
-        int grado = coe.length -1;
-        String resultado = "";
-        String signo = "";
+    public static String pintarPolinomio(int[] coeficientes) {
+        StringBuilder polinomioString = new StringBuilder();
 
-        for (int i = 0; i < coe.length; i++) {
+        for (int i = 0; i < coeficientes.length; i++) {
+            int coeficiente = coeficientes[i];
 
-            if (grado > 0 && coe[i+1] < 0){
-                signo = " - ";
-            } else {
-                signo = " + ";
+            if (coeficiente != 0) {
+                if (!polinomioString.isEmpty()) {
+                    polinomioString.append(coeficiente > 0 ? " + " : " - ");
+                }
+
+                if (Math.abs(coeficiente) != 1 || i == coeficientes.length - 1) {
+                    polinomioString.append(Math.abs(coeficiente));
+                }
+
+                if (i < coeficientes.length - 1) {
+                    polinomioString.append("x");
+
+                    if (i < coeficientes.length - 2) {
+                        polinomioString.append("^").append(coeficientes.length - 1 - i);
+                    }
+                }
             }
-
-            if (grado > 0 && coe[i] == 0){
-                grado--;
-            } else if (grado == 0) {
-                resultado += pintarMonomio(grado, coe[i]);
-            } else {
-                resultado += pintarMonomio(grado, coe[i]) + signo;
-                grado--;
-            }
-        }
-        System.out.println(Arrays.toString(coe));
-
-        return resultado;
-    }
-
-    private static String pintarMonomio(int grado, int coe) {
-        String monomio = "";
-
-        if (grado == 0 && coe < 0){
-            coe = coe * -1;
         }
 
-        if (grado == 0){
-            monomio += String.valueOf(coe);
-        } else if (grado == 1 && coe == 1) {
-            monomio += "x";
-        } else if (grado == 1 && coe > 1) {
-            monomio += coe + "x";
-        } else if (grado > 1 && coe == 0) {
-            monomio += "x" + "^" + grado;
-        } else if (grado > 1) {
-            monomio += coe + "x" + "^" + grado;
+        if (coeficientes[0] < 0){
+            polinomioString = new StringBuilder("-" + polinomioString);
         }
 
-        return monomio;
+        if (polinomioString.toString().isEmpty()){
+            polinomioString = new StringBuilder("0");
+        }
+
+        return polinomioString.toString();
     }
 }
