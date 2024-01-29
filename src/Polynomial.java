@@ -172,7 +172,20 @@ public class Polynomial {
 
 
     public Polynomial mult(Polynomial p2) {
-        return null;
+        int gradoMaximo = this.coeficientes.length + p2.coeficientes.length - 2;
+        float[] resultado = new float[gradoMaximo + 1];
+        int[] multiplo1 = this.coeficientes;
+        int[] multiplo2 = p2.coeficientes;
+        int gradoMultiplo1 = multiplo1.length-1;
+        int gradoMultiplo2 = multiplo2.length-1;
+
+        for (int i = 0; i < multiplo1.length; i++) {
+            for (int j = 0; j < multiplo2.length; j++) {
+                resultado[gradoMaximo - ((gradoMultiplo1-i) + (gradoMultiplo2-j))] += multiplo1[i] * multiplo2[j];
+            }
+        }
+
+        return new Polynomial(resultado);
     }
 
     public Polynomial[] div(Polynomial p2) {
