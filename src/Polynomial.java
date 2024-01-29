@@ -4,11 +4,8 @@ import java.util.Objects;
 
 public class Polynomial {
     private int[] coeficientes;
-    private String stringCoeficientes;
     public Polynomial(float[] cfs) {
         this.coeficientes = quitarDecimales(cfs);
-        this.stringCoeficientes = pintarPolinomio(quitarDecimales(cfs));
-
     }
 
     private int[] quitarDecimales(float[] cfs) {
@@ -28,7 +25,6 @@ public class Polynomial {
 
     public Polynomial(String s) {
         this.coeficientes = casteoString(s);
-        this.stringCoeficientes = s;
     }
 
     private int[] casteoString(String s) {
@@ -132,42 +128,24 @@ public class Polynomial {
     }
 
     public Polynomial add(Polynomial p) {
-        String[] arr1 = this.stringCoeficientes.split(" ");
-        String[] arr2 = p.stringCoeficientes.split(" ");
-        int grado = this.coeficientes.length;
-        String signo = "+";
+        int[] operador1 = this.coeficientes;
+        int[] operador2 = p.coeficientes;
+        int grado = this.coeficientes.length-1;
+        int gradoOperador1 = this.coeficientes.length-1;
+        int gradoOperador2 = p.coeficientes.length-1;
 
         if (p.coeficientes.length > grado) grado = p.coeficientes.length;
-        float[] suma = new float[grado];
+        float[] resultado = new float[grado+1];
 
-        for (int i = 0; i < arr1.length; i++) {
-            if (Objects.equals(arr1[i], "+")){
-                signo = "+";
-            } else if (Objects.equals(arr1[i], "-")) {
-                signo = "-";
-            } else if (signo == "+") {
-                suma[(grado-1) - calcularGrado(arr1[i])] += saberNumero(arr1[i]);
-            } else if (signo == "-") {
-                suma[(grado-1) - calcularGrado(arr1[i])] += saberNumero(arr1[i]) * -1;
-            }
+        for (int i = 0; i < operador1.length; i++) {
+            resultado[grado - (gradoOperador1-i)] += operador1[i];
         }
 
-        signo = "+";
-
-        for (int i = 0; i < arr2.length; i++) {
-            if (Objects.equals(arr2[i], "+")) {
-                signo = "+";
-            } else if (Objects.equals(arr2[i], "-")) {
-                signo = "-";
-            } else if (signo == "+") {
-                suma[(grado - 1) - calcularGrado(arr2[i])] += saberNumero(arr2[i]);
-            } else if (signo == "-") {
-                suma[(grado - 1) - calcularGrado(arr2[i])] += saberNumero(arr2[i]) * -1;
-            }
+        for (int i = 0; i < operador2.length; i++) {
+            resultado[grado - (gradoOperador2-i)] += operador2[i];
         }
 
-
-        return new Polynomial(suma);
+        return new Polynomial(resultado);
     }
 
 
