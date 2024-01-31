@@ -1,5 +1,3 @@
-import javax.print.attribute.HashDocAttributeSet;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Polynomial {
@@ -167,7 +165,74 @@ public class Polynomial {
     }
 
     public Polynomial[] div(Polynomial p2) {
-        return null;
+        Polynomial[] resultado = new Polynomial[2];
+
+        int[] div1 = this.coeficientes;
+        int[] div2 = p2.coeficientes;
+
+        int gradoFinal = div1.length - div2.length;
+        float[] coeficiente = new float[gradoFinal+1];
+
+        while (div1.length >= div2.length){
+            int saberGradoCoeficiente = (coeficiente.length-1) - (div1.length - div2.length);
+            int[] monomioCoeficiente = new int[coeficiente.length];
+            coeficiente[saberGradoCoeficiente] = (float) div1[0] / div2[0];
+            monomioCoeficiente[saberGradoCoeficiente] = div1[0] / div2[0];
+            int[] monoSumarYrestar = multiplicacionPolinomios(div2, new Polynomial(pintarPolinomio(monomioCoeficiente)));
+            div1 = sumarYrestar(div1, cambiarSigno(monoSumarYrestar));
+            monomioCoeficiente[saberGradoCoeficiente] = 0;
+        }
+
+        resultado[0] = new Polynomial(pintarPolinomio(quitarDecimales(coeficiente)));
+        resultado[1] = new Polynomial(pintarPolinomio(div1));
+        return resultado;
+    }
+
+    private int[] cambiarSigno(int[] monoSumarYrestar) {
+        for (int i = 0; i < monoSumarYrestar.length; i++) {
+            monoSumarYrestar[i] = monoSumarYrestar[i] * -1;
+        }
+
+        return monoSumarYrestar;
+    }
+
+    private int[] sumarYrestar(int[] div1, int[] sumaRestaOperador) {
+        String coeficiente = "";
+        for (int i = 0; i < sumaRestaOperador.length; i++) {
+            if (div1[i] + sumaRestaOperador[i] != 0 || i != 0){
+                if (div1[i] + sumaRestaOperador[i] == 0 && coeficiente.isEmpty()){
+                    continue;
+                }
+                coeficiente += String.valueOf(div1[i] + sumaRestaOperador[i]);
+                coeficiente += " ";
+            }
+        }
+
+        if (coeficiente.isEmpty()) coeficiente = "0";
+
+        String[] resultado = coeficiente.split(" ");
+        int[] resultadoFinal = new int[resultado.length];
+
+        for (int i = 0; i < resultadoFinal.length; i++) {
+            resultadoFinal[i] = Integer.parseInt(resultado[i]);
+        }
+
+        return resultadoFinal;
+    }
+
+    private int[] multiplicacionPolinomios(int[] operador, Polynomial operante) {
+        int gradoMaximo = operador.length + operante.coeficientes.length - 2;
+        int[] resultado = new int[gradoMaximo + 1];
+        int gradoMultiplo1 = operador.length-1;
+        int gradoMultiplo2 = operante.coeficientes.length-1;
+
+        for (int i = 0; i < operador.length; i++) {
+            for (int j = 0; j < operante.coeficientes.length; j++) {
+                resultado[gradoMaximo - ((gradoMultiplo1-i) + (gradoMultiplo2-j))] += operador[i] * operante.coeficientes[j];
+            }
+        }
+
+        return resultado;
     }
 
 
@@ -181,7 +246,6 @@ public class Polynomial {
     @Override
     public String toString() {
         System.out.println(pintarPolinomio(coeficientes));
-
         return pintarPolinomio(coeficientes);
     }
 
@@ -194,6 +258,8 @@ public class Polynomial {
             if (coeficiente != 0) {
                 if (!polinomioString.isEmpty()) {
                     polinomioString.append(coeficiente > 0 ? " + " : " - ");
+                } else if (polinomioString.isEmpty() && coeficiente < 0) {
+                    polinomioString.append("-");
                 }
 
                 if (Math.abs(coeficiente) != 1 || i == coeficientes.length - 1) {
@@ -208,10 +274,6 @@ public class Polynomial {
                     }
                 }
             }
-        }
-
-        if (coeficientes[0] < 0){
-            polinomioString = new StringBuilder("-" + polinomioString);
         }
 
         if (polinomioString.toString().isEmpty()){
