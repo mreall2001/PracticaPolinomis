@@ -6,6 +6,9 @@ public class Polynomial {
         this.coeficientes = quitarDecimales(cfs);
     }
 
+
+
+    // Simplemente lo que hacemos es cambiar de una array de floats a una array de int para luego usarlo mejor.
     private int[] quitarDecimales(float[] cfs) {
         int[] noDecimales = new int[cfs.length];
 
@@ -16,16 +19,50 @@ public class Polynomial {
     }
 
 
+
+
+
+
     public Polynomial() {
         this.coeficientes = new int[]{0};
-
     }
 
     public Polynomial(String s) {
-        this.coeficientes = casteoString(s);
+        this.coeficientes = casteoString(ponerEspacios(s));
+    }
+
+    private String ponerEspacios(String s) {
+        String stringConEspacios = "";
+
+        if (!hayEspacios(s)){
+            for (int i = 0; i < s.length(); i++) {
+                if (s.charAt(i) == '+' || s.charAt(i) == '-'){
+                    if (i == 0){
+                        stringConEspacios += s.charAt(i);
+                    }else {
+                        stringConEspacios += " " + s.charAt(i);
+                    }
+                }else {
+                    stringConEspacios += s.charAt(i);
+                }
+            }
+        }else {
+            stringConEspacios = s;
+        }
+        return stringConEspacios;
+    }
+
+    private boolean hayEspacios(String s) {
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' ') return true;
+        }
+
+        return false;
     }
 
     private int[] casteoString(String s) {
+
         String[] arrMonomios = s.split(" ");
         int gradoMaximo = saberGradoMaximo(arrMonomios);
         int[] arrFinal = new int[gradoMaximo+1];
@@ -45,6 +82,8 @@ public class Polynomial {
         return arrFinal;
 
     }
+
+
 
     private int saberNumero(String arrMonomio) {
         String resultado = "";
@@ -188,6 +227,7 @@ public class Polynomial {
         return resultado;
     }
 
+    // En este metodo simplemente cambia el signo a toda la array que le pasamos
     private int[] cambiarSigno(int[] monoSumarYrestar) {
         for (int i = 0; i < monoSumarYrestar.length; i++) {
             monoSumarYrestar[i] = monoSumarYrestar[i] * -1;
@@ -231,7 +271,6 @@ public class Polynomial {
                 resultado[gradoMaximo - ((gradoMultiplo1-i) + (gradoMultiplo2-j))] += operador[i] * operante.coeficientes[j];
             }
         }
-
         return resultado;
     }
 
@@ -242,10 +281,8 @@ public class Polynomial {
 
     }
 
-
     @Override
     public String toString() {
-        System.out.println(pintarPolinomio(coeficientes));
         return pintarPolinomio(coeficientes);
     }
 
@@ -275,6 +312,8 @@ public class Polynomial {
                 }
             }
         }
+
+        //Aquí tenemos en cuenta por si el string esta vacio que devolvamos un 0
 
         if (polinomioString.toString().isEmpty()){
             polinomioString = new StringBuilder("0");

@@ -50,7 +50,7 @@ public class PolynomialTest2 {
     public void constructs2() {
         Polynomial p;
 
-      /*  p = new Polynomial(new float[]{0, 0, 0});
+        p = new Polynomial(new float[]{0, 0, 0});
         assertEquals(new Polynomial("0"), p);
 
         p = new Polynomial("3x + 5 + 2x^2");
@@ -63,7 +63,7 @@ public class PolynomialTest2 {
         assertEquals("31x^2 + 3x - 2", p.toString());
 
         p = new Polynomial("31x^7 + 3x^7 - 5x - 12x^2 - 15x - 2 - 9 + 20 + 2x^2");
-        assertEquals("34x^7 - 10x^2 - 20x + 9", p.toString());*/
+        assertEquals("34x^7 - 10x^2 - 20x + 9", p.toString());
 
         p = new Polynomial("31x^7+3x^7-5x-12x^2-15x-2-9+20+2x^2");
         assertEquals("34x^7 - 10x^2 - 20x + 9", p.toString());
